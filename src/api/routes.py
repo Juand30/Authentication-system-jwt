@@ -29,3 +29,16 @@ def create_token():
 
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)
+
+@api.route ('/register', methods=['POST'])
+def create_user():
+    data = request.json
+    print(data)
+    try:
+        user = User(email=data["email"], password=data["password"],)
+        db.session.add(user)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return jsonify({"MESSAGE":"Error al registrar usuario"}), 400
+    return jsonify({"MESSAGE" : "Usuario creado"}), 200
